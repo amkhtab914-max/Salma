@@ -10,7 +10,17 @@ def initialize_mt5():
     # Check if MT5 is initialized
     if mt5.terminal_info() is None:
         if not mt5.initialize():
-            print("initialize() failed, error code =", mt5.last_error())
+            error_code, error_message = mt5.last_error()
+            print(f"initialize() failed, error code = {error_code}")
+            if error_code == -10005: # IPC timeout
+                print("\n--- MT5 Connection Help ---")
+                print("This 'IPC timeout' error usually means the script could not communicate with the MT5 Terminal.")
+                print("Please check the following:")
+                print("1. Is your MetaTrader 5 terminal running?")
+                print("2. Is the 'Algo Trading' button in the toolbar of your MT5 terminal enabled (it should be green)?")
+                print("3. Are you running the Python script and the MT5 terminal as the same user?")
+                print("4. Is a firewall or antivirus blocking the connection?")
+                print("-" * 25)
             return False
         print("MetaTrader5 package initialized")
 
