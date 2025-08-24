@@ -1,15 +1,12 @@
-from flask import Flask, jsonify, render_template
-import threading
+from flask import Flask, jsonify, render_template, request, abort
 
-# This app object will be imported by the main run.py
-# We specify the template_folder for HTML files and a static_folder for CSS/JS files.
+# This app object can be imported by a production WSGI server
 app = Flask(__name__, template_folder='web/templates', static_folder='web')
 
-# A simple dictionary to hold a reference to the shared data object
-# This will be set by the main thread before the app is run.
-app.config['SHARED_DATA'] = {
-    "latest_recommendation": None,
-    "lock": threading.Lock()
+# In-memory data store for the latest recommendation.
+# This will be updated by the backend script via a POST request.
+latest_recommendation = {
+    "status": "Waiting for first recommendation from backend script..."
 }
 
 @app.route('/')
@@ -20,42 +17,44 @@ def index():
 @app.route('/recommendations')
 def recommendations_page():
     """Serves the historical recommendations page."""
-    # Note: We need to specify the path relative to the template_folder
     return render_template('pages/recommendations.html')
 
-@app.route('/api/latest_recommendation')
+@app.route('/api/latest_recommendation', methods=['GET'])
 def get_latest_recommendation():
-    """API endpoint to get the latest recommendation."""
-    shared_data = app.config['SHARED_DATA']
-    with shared_data["lock"]:
-        if shared_data["latest_recommendation"]:
-            return jsonify(shared_data["latest_recommendation"])
-        else:
-            return jsonify({"status": "no recommendation available yet"}), 404
+    """
+    Public API endpoint for the frontend to fetch the latest recommendation.
+    """
+    return jsonify(latest_recommendation)
 
-def run_web_server(shared_data_ref):
+@app.route('/api/internal/update_recommendation', methods=['POST'])
+def update_recommendation():
     """
-    Function to run the web server, to be called in a thread.
-    It updates the app's config with the actual shared data object.
+    Internal-only API endpoint for the backend script to push new recommendations.
     """
-    app.config['SHARED_DATA'] = shared_data_ref
-    # use_reloader=False is important for running in a thread
-    app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+    # Basic security: only allow requests from localhost
+    if request.remote_addr != '127.0.0.1':
+        abort(403)  # Forbidden
+
+    global latest_recommendation
+    new_data = request.json
+    if not new_data:
+        abort(400) # Bad request
+
+    latest_recommendation = new_data
+    print(f"Web app received new recommendation: {new_data.get('decision')}")
+    return jsonify({"status": "success", "message": "Recommendation updated."})
+
+
+def run_web_server():
+    """
+    Function to run the web server.
+    """
+    # Note: The user should use a production WSGI server like Gunicorn or Waitress
+    # instead of Flask's built-in development server for a real deployment.
+    print("Starting Flask web server...")
+    app.run(host='0.0.0.0', port=8080, debug=False)
+
 
 if __name__ == '__main__':
-    # This block is for testing the web app in isolation.
-    print("--- Running Web App in standalone test mode ---")
-    # A dummy shared_data object for the test
-    test_shared_data = {
-        "latest_recommendation": {
-            "confidence": 75.5,
-            "decision": "BUY",
-            "scenario": "This is a test scenario for the web interface.",
-            "individual_scores": {
-                "Momentum": {"score": 0.8, "rationale": "Test rationale"},
-                "ATR_Filter": {"score": 0.6, "rationale": "Test rationale 2"}
-            }
-        },
-        "lock": threading.Lock()
-    }
-    run_web_server(test_shared_data)
+    # This allows running the web app directly for testing.
+    run_web_server()
