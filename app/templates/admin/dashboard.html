@@ -2,7 +2,7 @@
 
 {% block title %}Admin Dashboard{% endblock %}
 
-{% block page_title %}User Management{% endblock %}
+{% block page_title %}إدارة المستخدمين{% endblock %}
 
 {% block styles %}
 <style>
@@ -40,12 +40,12 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Registered On</th>
-                <th>Actions</th>
+                <th>المعرف</th>
+                <th>البريد الإلكتروني</th>
+                <th>الدور</th>
+                <th>الحالة</th>
+                <th>تاريخ التسجيل</th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -56,26 +56,26 @@
                 <td>{{ user.role }}</td>
                 <td>
                     {% if user.is_approved %}
-                        <span class="status-approved">Approved</span>
+                        <span class="status-approved">موافق عليه</span>
                     {% else %}
-                        <span class="status-pending">Pending Approval</span>
+                        <span class="status-pending">بانتظار الموافقة</span>
                     {% endif %}
                 </td>
                 <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td class="actions">
                     {% if not user.is_approved %}
-                        <a href="{{ url_for('admin.approve_user', user_id=user.id) }}">Approve</a>
+                        <a href="{{ url_for('admin.approve_user', user_id=user.id) }}">موافقة</a>
                     {% endif %}
                     {% if user.is_active %}
-                        <a href="{{ url_for('admin.deactivate_user', user_id=user.id) }}">Deactivate</a>
+                        <a href="{{ url_for('admin.deactivate_user', user_id=user.id) }}">تعطيل</a>
                     {% else %}
-                        <a href="{{ url_for('admin.activate_user', user_id=user.id) }}">Activate</a>
+                        <a href="{{ url_for('admin.activate_user', user_id=user.id) }}">تفعيل</a>
                     {% endif %}
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="6">No users found.</td>
+                <td colspan="6">لا يوجد مستخدمين لعرضهم.</td>
             </tr>
             {% endfor %}
         </tbody>

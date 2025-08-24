@@ -6,7 +6,8 @@ def create_app(config_class=Config):
     """
     Application factory function.
     """
-    app = Flask(__name__)
+    # Explicitly define static and template folder relative to the app package.
+    app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_object(config_class)
 
     # Initialize Flask extensions here
