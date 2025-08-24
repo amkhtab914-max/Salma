@@ -3,6 +3,11 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.main import bp
 from app.main.forms import LoginForm, RegistrationForm
 from app.models import User, db
+import time
+
+def get_version():
+    """Returns the current timestamp for cache-busting."""
+    return int(time.time())
 
 @bp.route('/')
 @bp.route('/index')
@@ -14,7 +19,7 @@ def index():
         return redirect(url_for('admin.dashboard'))
 
     # Regular clients see the main dashboard
-    return render_template('dashboard.html', title='Dashboard')
+    return render_template('dashboard.html', title='Dashboard', version=get_version())
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,7 +43,7 @@ def login():
         flash(f'Welcome back, {user.email}!')
         return redirect(url_for('main.index'))
 
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, version=get_version())
 
 @bp.route('/logout')
 def logout():
@@ -63,4 +68,4 @@ def register():
         flash('Congratulations, you are now a registered user! Please wait for admin approval.')
         return redirect(url_for('main.login'))
 
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, version=get_version())

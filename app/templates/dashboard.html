@@ -5,16 +5,53 @@
 {% block page_title %}Client Dashboard{% endblock %}
 
 {% block content %}
-<div class="welcome-message">
-    <h2>Welcome to your personal dashboard, {{ current_user.email }}!</h2>
-    <p>This is your main dashboard. Future features like recommendation history, performance analytics, and account settings will appear here.</p>
-    <p>Your current role is: <strong>{{ current_user.role }}</strong>.</p>
-    <p>Your account status is:
-        {% if current_user.is_approved %}
-            <strong style="color: green;">Approved</strong>
-        {% else %}
-            <strong style="color: orange;">Pending Approval</strong>
-        {% endif %}
-    </p>
+<div class="dashboard-grid">
+    <div class="tradingview-card card">
+        <!-- TradingView Widget Container -->
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div id="tradingview_chart_container" style="height:100%;width:100%"></div>
+        </div>
+    </div>
+
+    <div class="signal-card card">
+        <h2>Signal</h2>
+        <div id="signal-content" class="placeholder"><p>Loading...</p></div>
+
+        <h2 style="margin-top: 30px;">Confidence</h2>
+        <div id="confidence-content" class="placeholder"><p>Loading...</p></div>
+    </div>
+
+    <div class="breakdown-card card">
+        <h2>Strategy Breakdown</h2>
+        <div id="breakdown-content" class="placeholder"><p>Loading...</p></div>
+    </div>
 </div>
+<div class="status-footer">
+    <span id="last-updated">Last updated: Never</span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }} <!-- Includes the script.js from base -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // This script is specific to the dashboard page for loading the chart
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartContainer = document.getElementById('tradingview_chart_container');
+            if (chartContainer) {
+                new TradingView.widget({
+                    "autosize": true,
+                    "symbol": "FX:EURUSD",
+                    "interval": "60",
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "en",
+                    "enable_publishing": false,
+                    "allow_symbol_change": true,
+                    "container_id": "tradingview_chart_container"
+                });
+            }
+        });
+    </script>
 {% endblock %}

@@ -16,14 +16,19 @@ def admin_required(f):
     return decorated_function
 
 from flask import render_template
-from app.models import User
+from app.models import User, db
+import time
+
+def get_version():
+    """Returns the current timestamp for cache-busting."""
+    return int(time.time())
 
 @bp.route('/dashboard')
 @admin_required
 def dashboard():
     """Admin dashboard page, shows a list of all users."""
     users = User.query.order_by(User.created_at.desc()).all()
-    return render_template('admin/dashboard.html', users=users, title="Admin Dashboard")
+    return render_template('admin/dashboard.html', users=users, title="Admin Dashboard", version=get_version())
 
 @bp.route('/approve/<int:user_id>')
 @admin_required
