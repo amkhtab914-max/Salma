@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="welcome-message">
+    <h2>Welcome to your personal dashboard, {{ current_user.email }}!</h2>
+    <p>This is your main dashboard. Future features like recommendation history, performance analytics, and account settings will appear here.</p>
+    <p>Your current role is: <strong>{{ current_user.role }}</strong>.</p>
+    <p>Your account status is:
+        {% if current_user.is_approved %}
+            <strong style="color: green;">Approved</strong>
+        {% else %}
+            <strong style="color: orange;">Pending Approval</strong>
+        {% endif %}
+    </p>
+</div>
+{% endblock %}
