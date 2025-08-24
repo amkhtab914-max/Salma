@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل التوصيات - توصيات خطاب</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Page-specific styles */
+        .table-container {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+        thead th {
+            background-color: var(--bg-dark);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        tbody tr:hover {
+            background-color: #2c3240;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.8em;
+            text-align: center;
+        }
+        .status.profit { background-color: var(--buy-color); color: white; }
+        .status.loss { background-color: var(--sell-color); color: white; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">توصيات خطاب</div>
+        <nav class="sidebar-nav">
+            <a href="/">Dashboard</a>
+            <a href="/recommendations" class="active">التوصيات</a>
+            <a href="#">Articles</a>
+            <a href="#">Settings</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="main-header">
+            <h1>سجل التوصيات</h1>
+        </header>
+
+        <div class="table-container">
+            <!-- Filtering controls would go here -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الأداة</th>
+                        <th>القرار</th>
+                        <th>سعر الدخول</th>
+                        <th>وقف الخسارة</th>
+                        <th>جني الأرباح</th>
+                        <th>النتيجة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dummy Data -->
+                    <tr>
+                        <td>2024-08-23</td>
+                        <td>EUR/USD</td>
+                        <td>شراء</td>
+                        <td>1.0850</td>
+                        <td>1.0820</td>
+                        <td>1.0920</td>
+                        <td><span class="status profit">ربح</span></td>
+                    </tr>
+                    <tr>
+                        <td>2024-08-22</td>
+                        <td>ذهب</td>
+                        <td>بيع</td>
+                        <td>2350.00</td>
+                        <td>2365.00</td>
+                        <td>2320.00</td>
+                        <td><span class="status loss">خسارة</span></td>
+                    </tr>
+                    <tr>
+                        <td>2024-08-21</td>
+                        <td>USD/TRY</td>
+                        <td>شراء</td>
+                        <td>32.50</td>
+                        <td>32.20</td>
+                        <td>33.20</td>
+                        <td><span class="status profit">ربح</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

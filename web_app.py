@@ -2,8 +2,8 @@ from flask import Flask, jsonify, render_template
 import threading
 
 # This app object will be imported by the main run.py
-# We specify the template_folder relative to the project root.
-app = Flask(__name__, template_folder='web/templates')
+# We specify the template_folder for HTML files and a static_folder for CSS/JS files.
+app = Flask(__name__, template_folder='web/templates', static_folder='web')
 
 # A simple dictionary to hold a reference to the shared data object
 # This will be set by the main thread before the app is run.
@@ -14,10 +14,14 @@ app.config['SHARED_DATA'] = {
 
 @app.route('/')
 def index():
-    """Serves the main web page."""
-    # This will render the index.html file from the /web/templates directory.
-    # I will create this file in a later step.
-    return render_template('index.html', initial_data="Loading...")
+    """Serves the main dashboard page."""
+    return render_template('index.html')
+
+@app.route('/recommendations')
+def recommendations_page():
+    """Serves the historical recommendations page."""
+    # Note: We need to specify the path relative to the template_folder
+    return render_template('pages/recommendations.html')
 
 @app.route('/api/latest_recommendation')
 def get_latest_recommendation():

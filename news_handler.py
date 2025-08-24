@@ -55,12 +55,12 @@ async def get_latest_news(channel_url: str, limit=5):
             await client.connect()
 
         if not await client.is_user_authorized():
-            print("User is not authorized. Please run this script once manually to log in.")
-            await client.send_code_request(PERSONAL_CONFIG['phone'])
-            print("Code request sent. Please run manually and enter the code and 2FA password if prompted.")
+            print("User is not authorized. Please run generate_session.py script once manually to log in.")
+            # We no longer send the code here, the dedicated script handles it.
             return None
 
-        print(f"Successfully connected as {await client.get_me().first_name}")
+        me = await client.get_me()
+        print(f"Successfully connected as {me.first_name}")
         print(f"Fetching last {limit} messages from {channel_url} for news and OCR...")
 
         messages = await client.get_messages(channel_url, limit=limit)
@@ -103,11 +103,9 @@ async def get_latest_news(channel_url: str, limit=5):
         print(f"An error occurred in Telethon client: {e}")
         return None
     finally:
-        # In a long-running app, you might want to keep the client connected.
-        # For a simple script, we disconnect.
-        if client.is_connected():
-            await client.disconnect()
-            print("Client disconnected.")
+        # In the main run.py loop, we want the client to stay connected.
+        # The connection will be terminated when the main script exits.
+        print("News fetch cycle complete.")
 
 async def main():
     """Main function for testing the news handler."""
