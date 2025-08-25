@@ -40,13 +40,6 @@ async def main():
     """
     print("--- Khtab Binance Analysis Bot Starting ---")
 
-    # Validate config on startup
-    try:
-        config.validate_config()
-    except ValueError as e:
-        print(f"CRITICAL: {e}")
-        return
-
     while True:
         print(f"\n--- Starting New Analysis Cycle at {time.ctime()} ---")
 
