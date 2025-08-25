@@ -1,0 +1,12 @@
+# Environment variables
+.env
+
+# Session files
+*.session
+*.session-journal
+
+# IDE and cache files
+__pycache__/
+.vscode/
+.idea/
+*.pyc
