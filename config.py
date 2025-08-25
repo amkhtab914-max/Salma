@@ -1,38 +1,18 @@
-import os
-from dotenv import load_dotenv
-
-# Build the absolute path to the .env file and load it.
-# This makes the config loading independent of the current working directory.
-basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(dotenv_path=os.path.join(basedir, '.env'))
+"""
+Configuration file for the Khtab Binance Bot.
+All credentials and settings are stored directly here.
+"""
 
 # --- Binance API Credentials ---
-BINANCE_API_KEY = os.getenv('BINANCE_API_KEY')
-BINANCE_API_SECRET = os.getenv('BINANCE_API_SECRET')
+BINANCE_API_KEY = "axz9jHi1b8EFsoZslvGW73b8IHXnNMAanaJALiiPhvrVDOy05C6e8iEZzIRMrRyo"
+BINANCE_API_SECRET = "CF3CXAIb9HecE7h65Gsyf4g0AYNoz8D40rmFaAoQXdKa0dDh7JR4qupwU8kXm0Mx"
 
 # --- Telegram Bot Credentials ---
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-TELEGRAM_CHANNEL_ID = os.getenv('TELEGRAM_CHANNEL_ID')
+TELEGRAM_BOT_TOKEN = "8352440502:AAESVcMCfuVqyRcbkX1VJ1n_YQiYllv5PDI"
+TELEGRAM_CHANNEL_ID = "2145203930"
 
 # --- Telegram Personal Account Credentials (for Telethon) ---
-TELETHON_API_ID = os.getenv('TELETHON_API_ID')
-TELETHON_API_HASH = os.getenv('TELETHON_API_HASH')
-TELETHON_PHONE = os.getenv('TELETHON_PHONE')
-TELETHON_SESSION_NAME = os.getenv('TELETHON_SESSION_NAME')
-
-# --- Validation ---
-def validate_config():
-    """Checks if all essential configuration variables are set."""
-    essential_vars = [
-        BINANCE_API_KEY,
-        BINANCE_API_SECRET,
-        TELEGRAM_BOT_TOKEN,
-        TELEGRAM_CHANNEL_ID,
-    ]
-    if not all(essential_vars):
-        raise ValueError("One or more essential environment variables are missing. Please check your .env file.")
-    print("Configuration loaded and validated successfully.")
-
-# You can call validate_config() on import if you want to fail early,
-# or call it from the main script.
-# validate_config()
+TELETHON_API_ID = 27793760
+TELETHON_API_HASH = "43f9370d8e976f794e04c5d697b124b4"
+TELETHON_PHONE = "+905317298444"
+TELETHON_SESSION_NAME = "Khtab_Bot_Session"

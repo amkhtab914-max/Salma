@@ -2,4 +2,3 @@ python-binance
 python-telegram-bot
 pandas
 pandas-ta
-python-dotenv
